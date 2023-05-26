@@ -9,7 +9,14 @@ type Version = semver.Version
 
 // NewVersion parses a given version and returns an instance of Version
 func NewVersion(s string) (Version, error) {
-	v, err := semver.Parse(s)
+	c, err := newConstraint(s)
+
+	var version = s
+	if err == nil {
+		version = c.version.String()
+	}
+
+	v, err := semver.Parse(version)
 	if err != nil {
 		return Version{}, err
 	}
